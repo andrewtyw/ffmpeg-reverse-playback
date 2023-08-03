@@ -1,18 +1,17 @@
-# ffmpeg-reverse-playback
-A pretty easy demo of using ffmpeg to playback a video (reverse playing).  一个简单的demo: 使用ffmpeg实现流畅的视频倒放、跳转。
+# Video-reverse-playing
+A pretty easy demo of using FFmpeg to play video in reverse
 
 ## Environment
 - Qt 5.14 MinGW 64-bit 
 - ffmpeg n4.4.2-20220415
 
-## How it works? （原理）
-- 生产者消费者模型：有2个线程，解码线程和渲染线程。解码线程负责解码若干段帧放到Controller对象的队列Q中，渲染线程从Q中取帧，显示在画面上
-- english version:  Just like the producer-consumer problem, we have 2 threads to decode and render frames. The decode thread produces frames and puts it to the queue in `Controller`; the rendering thread gets frame from the queue and show it.
+## How it works?
+- I use the producer-consumer design pattern. The video decoder will decode video frames into a blocking queue. Once the queue is non-empty, the frame render will be notified and then retrieve frames from the buffer and render them on the screen.  
 
 ## Important classes:
-- `ReverseDisplay` in `/reverse_v3/reversedisplay.h`, this is the rendering thread.
-- `ReverseDecode` in `/reverse_v3/reversedecode.h`, this is the decode thread.
-- `Controller` in `/reverse_v3/utils.h`, the structure that controls the decode and rendering thread.
+- `ReverseDisplay` in `/reverse_v3/reversedisplay.h`,  rendering thread.
+- `ReverseDecode` in `/reverse_v3/reversedecode.h`, video-decoding thread.
+- `Controller` in `/reverse_v3/utils.h`, a structure that contains a blocking queue to control the rendering and decoding thread.
 
 
 
